@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('https://images.unsplash.com/photo-1503327431567-3ab5e6e79140?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHdlYXRoZXIlMjBhcHB8ZW58MHx8MHx8fDA%3D') no-repeat center center/cover;
+      overflow: hidden;
+      position: relative;
+    }
+    .weather-container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1.5s ease-in-out, containerGlow 3s infinite alternate;
+      z-index: 10;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes containerGlow {
+      from { box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); }
+      to { box-shadow: 0 8px 25px rgba(0, 128, 255, 0.5); }
+    }
+    input[type="text"],
+    select {
+      padding: 10px;
+      width: 80%;
+      margin-bottom: 15px;
+      font-size: 16px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input[type="text"]:focus {
+      border-color: #555;
+      outline: none;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background: linear-gradient(45deg, #ff6f61, #ffba08, #8ac926);
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      background-size: 200% 200%;
+      animation: gradientAnimation 3s infinite;
+    }
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+    .weather-info {
+      margin-top: 20px;
+      font-size: 18px;
+      animation: bounceIn 1s ease-in-out;
+    }
+    @keyframes bounceIn {
+      0%, 20%, 40%, 60%, 80%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    .temperature {
+      font-size: 36px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .cloud {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.7);
+      width: 200px;
+      height: 100px;
+      border-radius: 50%;
+      filter: blur(15px);
+      animation: floatClouds linear infinite;
+    }
+    @keyframes floatClouds {
+      0% { transform: translateX(-250px); }
+      100% { transform: translateX(110vw); }
+    }
+    .cloud:nth-child(1) {
+      top: 5%;
+      left: -250px;
+      animation-duration: 30s;
+    }
+    .cloud:nth-child(2) {
+      top: 20%;
+      left: -300px;
+      animation-duration: 35s;
+    }
+    .cloud:nth-child(3) {
+      top: 35%;
+      left: -250px;
+      animation-duration: 40s;
+    }
+    .cloud:nth-child(4) {
+      top: 55%;
+      left: -300px;
+      animation-duration: 45s;
+    }
+    .cloud:nth-child(5) {
+      top: 75%;
+      left: -400px;
+      animation-duration: 50s;
+    }
+  </style>
+</head>
+<body>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+
+  <div class="weather-container">
+    <h1>Weather App</h1>
+    <input type="text" id="location" placeholder="Enter location" />
+    <br />
+    <select id="unit">
+      <option value="metric">Celsius</option>
+      <option value="imperial">Fahrenheit</option>
+    </select>
+    <br />
+    <button onclick="getWeather()">Get Weather</button>
+    <div id="loading" style="display:none; margin-top: 10px; font-size: 18px;">Loading...</div>
+    <div id="weather-info" class="weather-info"></div>
+  </div>
+
+  <script>
+    async function getWeather() {
+      const location = document.getElementById('location').value;
+      const unit = document.getElementById('unit').value;
+      const apiKey = '4ecd32249abd47fb9ff85526252401';
+      const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=yes`;
+      const weatherInfoDiv = document.getElementById('weather-info');
+      const loadingDiv = document.getElementById('loading');
+
+      if (!location) {
+        weatherInfoDiv.innerHTML = '<p style="color: red;">Please enter a location.</p>';
+        return;
+      }
+
+      weatherInfoDiv.innerHTML = '';
+      loadingDiv.style.display = 'block';
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('Failed to fetch weather data');
+        }
+        const data = await response.json();
+        const temperature = unit === 'metric' ? data.current.temp_c : data.current.temp_f;
+        const condition = data.current.condition.text;
+        const locationName = data.location.name;
+
+        weatherInfoDiv.innerHTML = `
+          <p>Location: ${locationName}</p>
+          <p class="temperature">${temperature}&deg;${unit === 'metric' ? 'C' : 'F'}</p>
+          <p>Condition: ${condition}</p>
+        `;
+
+        const body = document.body;
+        if (condition.toLowerCase().includes('rain')) {
+          body.style.background = 'url(https://images.unsplash.com/photo-1520098895241-5d5b4dc48eeb) no-repeat center center/cover';
+        } else if (condition.toLowerCase().includes('snow') || condition.toLowerCase().includes('winter')) {
+          body.style.background = 'url(https://images.unsplash.com/photo-1604673801175-324d6954ec5a) no-repeat center center/cover';
+        } else if (condition.toLowerCase().includes('sunny')) {
+          body.style.background = 'url(https://images.unsplash.com/photo-1501630834273-4b5604d2ee31) no-repeat center center/cover';
+        } else {
+          body.style.background = 'url(https://images.unsplash.com/photo-1503327431567-3ab5e6e79140) no-repeat center center/cover';
+        }
+      } catch (error) {
+        weatherInfoDiv.innerHTML = '<p style="color: red;">Error fetching weather data. Please try again.</p>';
+      } finally {
+        loadingDiv.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

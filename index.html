@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Signup</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <!-- Adding Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #081b29;
+        }
+
+        .wrapper {
+            position: relative;
+            width: 900px;
+            height: 600px;
+            background: #081b29;
+            border: 2px solid #0ef;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 0 25px #0ef;
+        }
+
+        /* Left Partition */
+        .left-section {
+            position: relative;
+            width: 50%;
+            background: linear-gradient(135deg, #081b29, #0ef);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: skewX(-10deg);
+            z-index: 2;
+        }
+
+        .left-content {
+            transform: skewX(10deg);
+            text-align: center;
+            color: white;
+        }
+
+        /* Updated Font for Name and Description */
+        .left-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #f0f0f0;
+            text-transform: uppercase;
+        }
+
+        .left-content p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            margin-top: 10px;
+            color: #bbb;
+            line-height: 1.6;
+        }
+
+        /* Right Partition */
+        .right-section {
+            position: relative;
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #081b29;
+        }
+
+        .form-box {
+            width: 85%;
+        }
+
+        h2 {
+            font-size: 32px;
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-box {
+            position: relative;
+            margin: 25px 0;
+            width: 100%;
+            height: 50px;
+        }
+
+        .input-box input {
+            height: 100%;
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: white;
+            font-weight: 500;
+            padding-right: 26px;
+            border-bottom: 2px solid white;
+            transition: 0.5s;
+        }
+
+        .input-box input:focus,
+        .input-box input:valid {
+            border-bottom-color: #0ef;
+        }
+
+        .input-box label {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: white;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .input-box input:focus ~ label,
+        .input-box input:valid ~ label {
+            top: -5px;
+            color: #0ef;
+        }
+
+        .input-box i {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: white;
+            transition: 0.5s;
+        }
+
+        .input-box input:focus ~ i,
+        .input-box input:valid ~ i {
+            color: #0ef;
+        }
+
+        .btn {
+            position: relative;
+            width: 100%;
+            height: 45px;
+            font-size: 16px;
+            border: none;
+            border-radius: 40px;
+            background: linear-gradient(90deg, #0ef, #081b29, #0ef);
+            background-size: 200%;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+            z-index: 1;
+            overflow: hidden;
+            transition: background-position 0.5s ease, color 0.5s ease;
+        }
+
+        .btn:hover {
+            background-position: 100%;
+        }
+
+        .logreg-link {
+            font-size: 14.5px;
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .logreg-link a {
+            color: #0ef;
+            font-weight: 600;
+            font-size: 14.5px;
+            text-decoration: none;
+        }
+
+        .logreg-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Left Section -->
+        <div class="left-section">
+            <div class="left-content">
+                <h1>Raj Shah</h1><br>
+                <p>Hi, I am Raj Shah. This is my project.<br> I hope you feel comfortable while using this website.</p>
+            </div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="form-box">
+                <h2 id="form-title">Login</h2>
+                <form onsubmit="return handleAction(event)">
+                    <div class="input-box">
+                        <input type="text" id="username" required>
+                        <label>Username</label>
+                        <i class="bx bxs-user"></i>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" id="password" required>
+                        <label>Password</label>
+                        <i class="bx bxs-lock-alt"></i>
+                    </div>
+                    <button type="submit" class="btn" id="form-button">Login</button>
+                    <div class="logreg-link">
+                        <p id="form-toggle">Don't have an account? <a href="#" onclick="toggleForm()">Sign up</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const users = {};
+        let isLoginMode = true;
+
+        function toggleForm() {
+            isLoginMode = !isLoginMode;
+            const title = document.getElementById("form-title");
+            const button = document.getElementById("form-button");
+            const toggleText = document.getElementById("form-toggle");
+
+            if (isLoginMode) {
+                title.textContent = "Login";
+                button.textContent = "Login";
+                toggleText.innerHTML = `Don't have an account? <a href="#" onclick="toggleForm()">Sign up</a>`;
+            } else {
+                title.textContent = "Sign Up";
+                button.textContent = "Sign Up";
+                toggleText.innerHTML = `Already have an account? <a href="#" onclick="toggleForm()">Login</a>`;
+            }
+        }
+
+        function handleAction(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (isLoginMode) {
+                if (users[username] === password) {
+                    alert("Login successful!");
+                    window.location.href = "blue-background.html";
+                } else {
+                    alert("Incorrect username or password.");
+                }
+            } else {
+                if (users[username]) {
+                    alert("Username already exists. Please choose another.");
+                } else {
+                    users[username] = password;
+                    alert("Signup successful! Please log in.");
+                    toggleForm();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
