@@ -1,0 +1,1 @@
+This project is a weather app that you can access only after logging in or signing up. Once you're in, you can see live weather updates with cool animations and backgrounds that change based on the weather. It's built with HTML, CSS, and JavaScript to offer a modern and interactive experience.
